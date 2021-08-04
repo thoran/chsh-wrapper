@@ -1,33 +1,39 @@
 #!/usr/bin/env ruby
 # chsh
 
-# 20210728
-# 0.0.0
+# 20210728, 0802
+# 0.1.0
 
-require 'FileUtils/where'
 require 'readline'
 
 def system_chsh
-  FileUtils.where('chsh').last
+  `which -a chsh`.split("\n").last
 end
 
-def list_of_shells
+def list_of_system_shells
   `cat /etc/shells`.split("\n")
     .reject{|line| line =~ /^#/ || line == ''}
     .map{|line| line.sub(/\/bin\//, '')}
 end
 
+def extended_list_of_shells
+  list_of_system_shells.map do |shell|
+    `which -a #{shell}`
+  end.flatten
+end
+
 def run_menu
-  list_of_shells.each_with_index do |shell, index|
+  extended_list_of_shells.each_with_index do |shell, index|
     puts "#{index}. #{shell}"
   end
   menu_number = Readline.readline('Shell #: ').to_i
-  selection = list_of_shells[menu_number]
+  selection = extended_list_of_shells[menu_number]
   chsh(selection)
 end
 
 def chsh(shell)
-  system("#{system_chsh} -s /bin/#{shell}")
+  puts("#{system_chsh} -s #{shell}")
+  system("#{system_chsh} -s #{shell}")
 end
 
 def main
