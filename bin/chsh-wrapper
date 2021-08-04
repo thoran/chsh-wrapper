@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 # chsh-wrapper
 
-# 20210802
-# 0.2.0
+# 20210804
+# 0.2.1
 
 # Changes:
 # 1. /chsh/chsh-wrapper/
@@ -10,6 +10,9 @@
 # 3. /extended_list_of_shell/extended_list_of_shell_paths/
 # 4. ~ chsh(), so that it now takes a shell path, since not all shells are located in /bin.
 # 5. + shell_path_for(), so that I can translate the shell name to a path for chsh when the shell is specified in ARGV[0], which now requires that.
+# 1: 
+# 6. ~ main(), to make use of required_shell consistently rather than ARGV[0].
+# 7. ~ shell_path_for(): /each_with_index/each/
 
 require 'readline'
 
@@ -45,15 +48,15 @@ def chsh(shell_path)
 end
 
 def shell_path_for(shell)
-  extended_list_of_shell_paths.each_with_index do |shell_path, index|
+  extended_list_of_shell_paths.each do |shell_path|
     if shell_path.split('/').last == shell
-      return extended_list_of_shell_paths[index]
+      return shell_path
     end
   end
 end
 
 def main
-  if ARGV[0]
+  if required_shell
     shell_path = shell_path_for(required_shell)
     chsh(shell_path)
   else
