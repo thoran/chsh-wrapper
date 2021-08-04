@@ -1,0 +1,64 @@
+#!/usr/bin/env ruby
+# chsh-wrapper
+
+# 20210802
+# 0.2.0
+
+# Changes:
+# 1. /chsh/chsh-wrapper/
+# 2. - system_chsh()
+# 3. /extended_list_of_shell/extended_list_of_shell_paths/
+# 4. ~ chsh(), so that it now takes a shell path, since not all shells are located in /bin.
+# 5. + shell_path_for(), so that I can translate the shell name to a path for chsh when the shell is specified in ARGV[0], which now requires that.
+
+require 'readline'
+
+def required_shell
+  ARGV[0]
+end
+
+def list_of_system_shells
+  `cat /etc/shells`.split("\n")
+    .reject{|line| line =~ /^#/ || line == ''}
+    .map{|line| line.sub(/\/bin\//, '')}
+end
+
+def extended_list_of_shell_paths
+  list_of_system_shells.map do |shell|
+    `which -a #{shell}`.split("\n").map(&:strip)
+  end.flatten
+end
+
+def run_menu
+  extended_list_of_shell_paths.each_with_index do |shell_path, index|
+    puts "#{index}. #{shell_path}"
+  end
+  menu_number = Readline.readline('Shell #: ').to_i
+  selection = extended_list_of_shell_paths[menu_number]
+  chsh(selection)
+end
+
+def chsh(shell_path)
+  user = `echo $USER`
+  puts("sudo chsh -s #{shell_path} #{user}")
+  system("sudo chsh -s #{shell_path} #{user}")
+end
+
+def shell_path_for(shell)
+  extended_list_of_shell_paths.each_with_index do |shell_path, index|
+    if shell_path.split('/').last == shell
+      return extended_list_of_shell_paths[index]
+    end
+  end
+end
+
+def main
+  if ARGV[0]
+    shell_path = shell_path_for(required_shell)
+    chsh(shell_path)
+  else
+    run_menu
+  end
+end
+
+main
