@@ -1,0 +1,58 @@
+# CHANGELOG
+
+## 20260818
+
+0.2.3: + CHANGELOG, and the Changes section retired from the script header.
+
+1. + CHANGELOG: An entry for each version, those for 0.2.0 and 0.2.1 taken from the header's Changes section.
+2. ~ bin/chsh-wrapper: - the Changes section from the header, the CHANGELOG holding it now.
+3. ~ chsh-wrapper: /0.2.2/0.2.3/
+
+0.2.2: Populate .gitignore, and make the script executable.
+
+1. ~ .gitignore: The whole set for Ruby, being gem and build products, Bundler, RDoc, YARD, editor files, Ruby version managers, test artefacts and .claude.
+2. ~ bin/chsh-wrapper: Executable, which it had not been since 0.2.1.
+3. ~ chsh-wrapper: /0.2.1/0.2.2/
+
+
+## 20210804
+
+0.2.1: ~ main(), ~ shell_path_for(): Uses required_shell throughout, and each rather than each_with_index.
+
+1. ~ main(), to make use of required_shell consistently rather than ARGV[0].
+2. ~ shell_path_for(): /each_with_index/each/
+3. ~ bin/chsh-wrapper: No longer executable.
+4. ~ chsh-wrapper: /0.2.0/0.2.1/
+
+
+## 20210802
+
+0.2.0: /chsh/chsh-wrapper/, which passes chsh a shell's path rather than a name under /bin.
+
+1. /chsh/chsh-wrapper/
+2. - system_chsh()
+3. /extended_list_of_shells/extended_list_of_shell_paths/
+4. ~ chsh(), so that it now takes a shell path, since not all shells are located in /bin.
+5. + shell_path_for(), so that I can translate the shell name to a path for chsh when the shell is specified in ARGV[0], which now requires that.
+6. + required_shell()
+7. ~ chsh(): Runs sudo chsh for the user in $USER.
+8. ~ chsh-wrapper: /0.1.0/0.2.0/
+
+
+## 20210728, 0802
+
+0.1.0: Offer every installed copy of each shell, rather than only /bin's.
+
+1. ~ system_chsh(): Uses which -a, rather than FileUtils.where.
+2. /list_of_shells/list_of_system_shells/
+3. + extended_list_of_shells(): What which -a gives for each system shell.
+4. ~ run_menu(): Lists extended_list_of_shells.
+5. ~ chsh(): Passes the shell as given, rather than under /bin, and prints the command first.
+6. ~ chsh: /0.0.0/0.1.0/
+
+
+## 20210728
+
+0.0.0: + chsh
+
+1. + bin/chsh: A menu of the shells in /etc/shells, or the shell named as the argument, passed to chsh -s.

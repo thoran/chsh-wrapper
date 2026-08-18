@@ -2,17 +2,7 @@
 # chsh-wrapper
 
 # 20260818
-# 0.2.2
-
-# Changes:
-# 1. /chsh/chsh-wrapper/
-# 2. - system_chsh()
-# 3. /extended_list_of_shell/extended_list_of_shell_paths/
-# 4. ~ chsh(), so that it now takes a shell path, since not all shells are located in /bin.
-# 5. + shell_path_for(), so that I can translate the shell name to a path for chsh when the shell is specified in ARGV[0], which now requires that.
-# 1: 
-# 6. ~ main(), to make use of required_shell consistently rather than ARGV[0].
-# 7. ~ shell_path_for(): /each_with_index/each/
+# 0.2.3
 
 require 'readline'
 
