@@ -2,6 +2,11 @@
 
 ## 20260818
 
+0.2.4: + README.md
+
+1. + README.md: What it is for and how it is called.
+2. ~ chsh-wrapper: /0.2.3/0.2.4/
+
 0.2.3: + CHANGELOG, and the Changes section retired from the script header.
 
 1. + CHANGELOG: An entry for each version, those for 0.2.0 and 0.2.1 taken from the header's Changes section.
