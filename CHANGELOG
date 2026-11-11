@@ -2,6 +2,11 @@
 
 ## 20261111
 
+0.3.2: ~ README.md: How to alias it to chsh.
+
+1. ~ README.md: It is meant to be aliased to chsh, and the alias is given.
+2. ~ chsh-wrapper: /0.3.1/0.3.2/
+
 0.3.1: + LICENSE
 
 1. + LICENSE: MIT.

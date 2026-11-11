@@ -24,7 +24,11 @@ chsh-wrapper
 
 Every path found is listed and numbered; enter a number to select one.
 
-Anything else, such as `chsh-wrapper -s /bin/zsh`, is passed to `chsh` unchanged, so as it can stand in for `chsh`.
+Anything else, such as `chsh-wrapper -s /bin/zsh`, is passed to `chsh` unchanged, so as it can stand in for `chsh`. It is meant to be aliased to it:
+
+```shell
+alias chsh='chsh-wrapper'
+```
 
 ## Notes
 
