@@ -29,3 +29,7 @@ Anything else, such as `chsh-wrapper -s /bin/zsh`, is passed to `chsh` unchanged
 ## Notes
 
 It runs `sudo chsh -s <path> <user>` and prints the command before running it, so what it is about to do is visible first.
+
+## License
+
+MIT

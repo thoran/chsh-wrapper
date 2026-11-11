@@ -2,6 +2,12 @@
 
 ## 20261111
 
+0.3.1: + LICENSE
+
+1. + LICENSE: MIT.
+2. ~ README.md: + License.
+3. ~ chsh-wrapper: /0.3.0/0.3.1/
+
 0.3.0: Arguments other than the name of an installed shell are passed to chsh unchanged.
 
 1. ~ main(): Anything other than nothing or a sole installed shell's name goes to chsh as it is, so as chsh-wrapper can stand in for chsh.
