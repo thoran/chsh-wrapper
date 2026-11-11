@@ -1,56 +1,59 @@
 #!/usr/bin/env ruby
 # chsh-wrapper
 
-# 20260818
-# 0.2.4
+# 20261111
+# 0.3.0
 
 require 'readline'
 
-def required_shell
-  ARGV[0]
-end
-
 def list_of_system_shells
-  `cat /etc/shells`.split("\n")
-    .reject{|line| line =~ /^#/ || line == ''}
-    .map{|line| line.sub(/\/bin\//, '')}
+  File.readlines('/etc/shells', chomp: true)
+    .reject{|line| line.start_with?('#') || line.strip.empty?}
+    .map{|line| File.basename(line.strip)}
+    .uniq
 end
 
 def extended_list_of_shell_paths
-  list_of_system_shells.map do |shell|
-    `which -a #{shell}`.split("\n").map(&:strip)
-  end.flatten
+  @extended_list_of_shell_paths ||= (
+    list_of_system_shells.flat_map do |shell|
+      `which -a #{shell}`.split("\n").map(&:strip)
+    end.uniq
+  )
+end
+
+def shell_path_for(shell)
+  extended_list_of_shell_paths.find{|shell_path| File.basename(shell_path) == shell}
+end
+
+def required_shell
+  ARGV.first if ARGV.size == 1 && shell_path_for(ARGV.first)
 end
 
 def run_menu
   extended_list_of_shell_paths.each_with_index do |shell_path, index|
     puts "#{index}. #{shell_path}"
   end
-  menu_number = Readline.readline('Shell #: ').to_i
-  selection = extended_list_of_shell_paths[menu_number]
-  chsh(selection)
-end
-
-def chsh(shell_path)
-  user = `echo $USER`
-  puts("sudo chsh -s #{shell_path} #{user}")
-  system("sudo chsh -s #{shell_path} #{user}")
-end
-
-def shell_path_for(shell)
-  extended_list_of_shell_paths.each do |shell_path|
-    if shell_path.split('/').last == shell
-      return shell_path
-    end
+  menu_number = Readline.readline('Shell #: ').to_s.strip
+  if menu_number =~ /\A\d+\z/ && extended_list_of_shell_paths[menu_number.to_i]
+    chsh(extended_list_of_shell_paths[menu_number.to_i])
+  else
+    abort("No shell numbered #{menu_number.inspect}.")
   end
 end
 
+def chsh(shell_path)
+  command = ['sudo', 'chsh', '-s', shell_path, ENV['USER']]
+  puts(command.join(' '))
+  system(*command)
+end
+
 def main
-  if required_shell
-    shell_path = shell_path_for(required_shell)
-    chsh(shell_path)
-  else
+  if ARGV.empty?
     run_menu
+  elsif required_shell
+    chsh(shell_path_for(required_shell))
+  else
+    exec('chsh', *ARGV)
   end
 end
 

@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## 20261111
+
+0.3.0: Arguments other than the name of an installed shell are passed to chsh unchanged.
+
+1. ~ main(): Anything other than nothing or a sole installed shell's name goes to chsh as it is, so as chsh-wrapper can stand in for chsh.
+2. ~ required_shell(): Only a sole argument naming an installed shell counts.
+3. ~ shell_path_for(): Uses find rather than each, which returned the whole list where nothing matched, so as the list went to chsh as the shell.
+4. ~ list_of_system_shells(): Takes each entry's basename rather than removing the first /bin/, which made /opt/homebrew/bin/bash into /opt/homebrewbash. Reads /etc/shells directly.
+5. ~ extended_list_of_shell_paths(): Memoised, and without duplicates.
+6. ~ run_menu(): A selection which isn't the number of a listed shell stops, rather than an empty one choosing the first shell.
+7. ~ chsh(): Hands sudo its arguments separately, so as no /bin/sh parses them, and takes the user from ENV['USER'], without the trailing newline `echo $USER` left.
+8. ~ README.md: Other arguments are passed to chsh.
+9. ~ chsh-wrapper: /0.2.4/0.3.0/
+
+
 ## 20260818
 
 0.2.4: + README.md
